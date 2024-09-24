@@ -1,0 +1,29 @@
+package:
+  name: soar
+  version: 9.6.3
+
+source:
+  - url: https://github.com/SoarGroup/Soar/releases/download/releases%2F9.6.3/SoarSuite_9.6.3-Multiplatform.zip
+    sha256: e1bd634f1bf103631a3ac2107ca0ae1e80a95b18f090d8f9e6aecf1d3c2f38af
+    folder: soar
+  - path: ../src
+    folder: src
+
+build:
+  number: 5
+
+requirements:
+  build:
+    - python 3.12
+  run:
+    - python 3.12
+    - graphviz
+    - tk 8.6.13
+    - openjdk >=19.0.0
+
+about:
+  home: https://soar.eecs.umich.edu/
+  license: BSD-3-Clause
+  summary: Soar is a general cognitive architecture for developing systems that exhibit intelligent behavior.
+
+
