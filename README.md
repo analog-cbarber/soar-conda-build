@@ -23,7 +23,9 @@ manually for new releases.
 
 ## How to build
 
-Simply run conda-build (on MacOS):
+First make sure to increment the build number in the `meta.yaml` file,
+if it is the same as the previous build. Then you can build the package
+simply by running conda-build (on MacOS):
 
 ```bash
 conda build conda.recipe
