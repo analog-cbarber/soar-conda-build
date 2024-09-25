@@ -115,7 +115,8 @@ the build script does the following:
     The activate/deactivate scripts will be invoked when an environment
     using this package is activated or deactivated. The activate script
     will add the `$JAVA_HOME/bin` directory to the path, so that the java
-    executables from the environment will be used.
+    executables from the environment will be used. And it will also set
+    the `SOAR_HOME` environment variable to the location of the Soar binaries.
 
 [garconda]: http://boston-garage.pages.gitlab.analog.com/garconda/
 [garage-conda-local]: https://artifactory.analog.com/ui/repos/tree/General/garage-conda-local

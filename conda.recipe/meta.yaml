@@ -10,7 +10,7 @@ source:
     folder: src
 
 build:
-  number: 5
+  number: 6
 
 requirements:
   build:
