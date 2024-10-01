@@ -21,6 +21,35 @@ The recipe contains the following dependencies:
 The recipe currently hard codes the version of Soar and must be updated 
 manually for new releases.
 
+## Available releases
+
+The following builds are available on [garage-conda-local] on [Artifactory]:
+
+| Version         | Platforms        |
+|-----------------|------------------|
+| 9.6.3 (build 6) | MacOS M1.        |
+
+## How to install
+
+You can install into a conda environment on a supported platform using either conda or mamba:
+
+```bash
+conda install -c https://artifactory.analog.com/artifactory/garage-conda-local soar
+```
+
+If you have not already done so, we recommend that you configure `garage-conda-local` as a custom channel:
+
+```bash
+conda config --set custom_channels.garage-conda-local https://artifactory.analog.com/artifactory/
+```
+
+then you can install using the simple channel name:
+
+```bash
+conda install -c garage-conda-local soar
+```
+
+
 ## How to build
 
 First make sure to increment the build number in the `meta.yaml` file,
@@ -120,6 +149,7 @@ the build script does the following:
     executables from the environment will be used. And it will also set
     the `SOAR_HOME` environment variable to the location of the Soar binaries.
 
+[Artifactory]: https://artifactory.analog.com/
 [garconda]: http://boston-garage.pages.gitlab.analog.com/garconda/
 [garage-conda-local]: https://artifactory.analog.com/ui/repos/tree/General/garage-conda-local
 [garconda-upload]: http://boston-garage.pages.gitlab.analog.com/garconda/cli/garconda-upload/
