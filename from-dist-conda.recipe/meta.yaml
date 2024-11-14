@@ -1,0 +1,60 @@
+#The recipe does not build Soar from source. It simply downloads the binary
+#distribution from [GitHub][soar-releases] and copies and patches some
+#files. This is done by the `build.sh` script in the recipe. Specifically,
+#the build script does the following:
+#
+#1. Runs the `setup.sh` script from the Soar distribution. This will
+#    copy binaries into place based on the architecture and will remove
+#    any MacOS quarantine attributes.
+#2. Copies the resulting soar distribution directory to the `soar/`
+#    directory in the build prefix.
+#3. Copies shell scripts from `src/bin` in this repo into the `bin/`
+#    directory of the build prefix.
+#4. On MacOS uses `install_name_tool` to modify some hard-coded shared library
+#    dependencies from absolute paths in global install locations, to relative
+#    paths within the conda environment:
+#
+#    * `_Python_sml_ClientInterface.so`: fixes python dependency
+#    * `libTcl_sml_ClientInterface.dylib`: fixes libtcl dependency
+#    * `libtclsoarlib.dylib`: fixes libtcl dependency
+#5. Adds a `soar.pth` file to the Python `site-packages` directory to
+#    add the `soar/bin` directory to the Python path.
+#6. Copies the `activate.sh`/`deactivate.sh` scriptes from the recipe into
+#    the corresponding `etc/conda/activate.d`/`etc/conda/deactivate.d`
+#    directories.
+#
+#    The activate/deactivate scripts will be invoked when an environment
+#    using this package is activated or deactivated. The activate script
+#    will add the `$JAVA_HOME/bin` directory to the path, so that the java
+#    executables from the environment will be used. And it will also set
+#    the `SOAR_HOME` environment variable to the location of the Soar binaries.
+
+package:
+  name: soar
+  version: 9.6.3
+
+source:
+  - url: https://github.com/SoarGroup/Soar/releases/download/releases%2F9.6.3/SoarSuite_9.6.3-Multiplatform.zip
+    sha256: e1bd634f1bf103631a3ac2107ca0ae1e80a95b18f090d8f9e6aecf1d3c2f38af
+    folder: soar
+  - path: ../src
+    folder: src
+
+build:
+  number: 7
+
+requirements:
+  build:
+    - python 3.12
+  run:
+    - python 3.12
+    - graphviz
+    - tk 8.6.13
+    - openjdk >=19.0.0
+
+about:
+  home: https://soar.eecs.umich.edu/
+  license: BSD-3-Clause
+  summary: Soar is a general cognitive architecture for developing systems that exhibit intelligent behavior.
+
+

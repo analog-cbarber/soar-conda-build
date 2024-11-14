@@ -1,7 +1,20 @@
 # Conda build for Soar
 
-This repository contains a recipe and instructions for building a conda package for
+This repository contains recipes and instructions for building a conda package for
 the Soar cognitive architecture.
+
+There are currently two recipes in this repository:
+
+* from-dist-conda.recipe - builds from official Soar binary distribution
+    This currently includes VisualSoar and the TankSoar and Eaters tutorial programs.
+    This should be changed to produce a soar package and add-on packages for
+    VisualSoar and tutorial programs.
+* from-source.recipe - builds a local Soar source tree. 
+    This does not include VisualSoar or the tutorial programs.
+
+(*We should probably have the first recipe produce two or more packages.*)
+
+## from-dist-conda.recipe
 
 The recipe is based on the binary distribution of Soar available from the
 [Soar releases][soar-releases] on [GitHub][github-soar].
@@ -21,14 +34,29 @@ The recipe contains the following dependencies:
 The recipe currently hard codes the version of Soar and must be updated 
 manually for new releases.
 
+## from-source.recipe
+
+This recipe builds Soar from a local Soar source tree.
+
+In order to use this recipe, you must create a symbolic link in this
+directory named `local-soar-root` that points to the root of the
+of a local Soar source tree.
+
 ## How to build
 
-First make sure to increment the build number in the `meta.yaml` file,
-if it is the same as the previous build. Then you can build the package
-simply by running conda-build (on MacOS):
+The version number must be adjusted manually in the `meta.yaml` file
+as needed. The build number should also be incremented if you do multiple
+builds of the same version for the same architeture and python version.
 
 ```bash
-conda build conda.recipe
+conda build <recipe-dir>
+```
+
+For `from-source-conda.recipe` you should add the `--python` argument
+to specify the desired target python version. For example:
+
+```bash
+conda build --python 3.12 from-source-conda.recipe
 ```
 
 The resulting package can be found in the architecture-specific subdirectory
@@ -86,39 +114,6 @@ the specified version, e.g.:
 ```bash
 conda create -n soar-test -c garage-conda-local soar=9.6.3
 ```
-
-## Implementation notes
-
-The recipe does not build Soar from source. It simply downloads the binary
-distribution from [GitHub][soar-releases] and copies and patches some
-files. This is done by the `build.sh` script in the recipe. Specifically,
-the build script does the following:
-
-1. Runs the `setup.sh` script from the Soar distribution. This will
-    copy binaries into place based on the architecture and will remove
-    any MacOS quarantine attributes.
-2. Copies the resulting soar distribution directory to the `soar/`
-    directory in the build prefix.
-3. Copies shell scripts from `src/bin` in this repo into the `bin/`
-    directory of the build prefix.
-4. On MacOS uses `install_name_tool` to modify some hard-coded shared library
-    dependencies from absolute paths in global install locations, to relative
-    paths within the conda environment:
-
-    * `_Python_sml_ClientInterface.so`: fixes python dependency
-    * `libTcl_sml_ClientInterface.dylib`: fixes libtcl dependency
-    * `libtclsoarlib.dylib`: fixes libtcl dependency
-5. Adds a `soar.pth` file to the Python `site-packages` directory to
-    add the `soar/bin` directory to the Python path.
-6. Copies the `activate.sh`/`deactivate.sh` scriptes from the recipe into
-    the corresponding `etc/conda/activate.d`/`etc/conda/deactivate.d`
-    directories.
-
-    The activate/deactivate scripts will be invoked when an environment
-    using this package is activated or deactivated. The activate script
-    will add the `$JAVA_HOME/bin` directory to the path, so that the java
-    executables from the environment will be used. And it will also set
-    the `SOAR_HOME` environment variable to the location of the Soar binaries.
 
 [garconda]: http://boston-garage.pages.gitlab.analog.com/garconda/
 [garage-conda-local]: https://artifactory.analog.com/ui/repos/tree/General/garage-conda-local

@@ -1,4 +1,3 @@
-
 ./soar/setup.sh
 cp -r soar $PREFIX/soar
 cp -r src/bin/* $PREFIX/bin

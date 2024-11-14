@@ -1,0 +1,70 @@
+# This recipe builds a Soar conda package from source
+#
+# This works on MacOS, not sure about other platforms, in particular
+# the compiler dependencies might be different.
+#
+# Current prerequisites
+#  - have created a symlink ../local-soar-root pointing to a local Soar source tree
+#
+# To build the package:
+#  - Set version manually in this file
+#  - Update the build number if necessary
+#  - Run `conda build from-source-conda.recipe --python <version>`
+#
+# If no python version specified, conda's default python version will be used.
+
+package:
+  name: soar
+  version: 9.6.3.1
+
+source:
+  - path: ../local-soar-root/build_support
+    folder: soar/build_support
+  - path: ../local-soar-root/Core
+    folder: soar/Core
+  - path: ../local-soar-root/Java
+    folder: soar/Java
+  - path: ../local-soar-root/PerformanceTests
+    folder: soar/PerformanceTests
+  - path: ../local-soar-root/scons
+    folder: soar/scons
+  - path: ../local-soar-root/scripts
+    folder: soar/scripts
+  - path: ../local-soar-root/SoarCLI
+    folder: soar/SoarCLI
+  - path: ../local-soar-root/Tcl
+    folder: soar/Tcl
+  - path: ../local-soar-root/SConstruct
+    folder: soar/SConstruct
+  - path: ../local-soar-root/soarversion
+    folder: soar/soarversion
+  - path: ../local-soar-root/LICENSE.md
+  - path: ../src
+    folder: src
+
+build:
+  number: 9
+
+requirements:
+  build:
+    - python ={{ environ["PY_VER"] }}
+    - tk 8.6.13.*
+    - openjdk >=19.0.0
+    - swig >=4.3
+    - clangxx 18.*
+
+  run:
+    - python ={{ environ["PY_VER"] }}
+    - graphviz
+    - tk 8.6.13.*
+    - openjdk >=19.0.0
+
+about:
+  home: https://soar.eecs.umich.edu/
+  license: BSD-3-Clause
+  license_file: LICENSE.md
+  summary: Soar is a general cognitive architecture for developing systems that exhibit intelligent behavior.
+  dev_url: https://github.com/SoarGroup/Soar
+  doc_url: https://soar.eecs.umich.edu/
+
+
